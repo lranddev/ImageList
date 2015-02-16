@@ -14,6 +14,7 @@ import android.app.Activity;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -103,8 +104,7 @@ public class MainActivity extends Activity {
 
 
 				InstagramRequest request = new InstagramRequest(mInstagramSession.getAccessToken());
-				String response			 = request.createRequest("GET", "/users/self/feed", params);
-
+				String response			 = request.createRequest("GET", "/tags/selfie/media/recent", params);
 				if (!response.equals("")) {
 					JSONObject jsonObj  = (JSONObject) new JSONTokener(response).nextValue();    				
 					JSONArray jsonData	= jsonObj.getJSONArray("data");
@@ -115,9 +115,10 @@ public class MainActivity extends Activity {
 						photoList = new ArrayList<String>();
 
 						for (int i = 0; i < length; i++) {
-							JSONObject jsonPhoto = jsonData.getJSONObject(i).getJSONObject("images").getJSONObject("low_resolution");
+							//JSONObject jsonPhoto = jsonData.getJSONObject(i).getJSONObject("images").getJSONObject("low_resolution");
+							JSONObject jsonPhoto = jsonData.getJSONObject(i).getJSONObject("caption").getJSONObject("from");
 
-							photoList.add(jsonPhoto.getString("url"));
+							photoList.add(jsonPhoto.getString("profile_picture"));
 						}
 					}
 				}
